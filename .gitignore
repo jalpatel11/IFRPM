@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.env
+
+# Data (too large for git)
+data/raw/
+data/processed/
+
+# Models
+models/*.pkl
+models/*.pt
+
+# OS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
