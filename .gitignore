@@ -22,3 +22,9 @@ models/*.pt
 CLAUDE.md
 
 .vscode/
+
+# Phase 1 Specific
+phase_1/data/
+phase_1/outputs/
+phase_1/venv/
+phase_1/__pycache__/

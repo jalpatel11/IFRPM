@@ -1,0 +1,38 @@
+dataset:
+  path: "data/processed/ngafid_sample.csv"
+  max_rows: -1
+  use_subset: false
+  subset_size: 500
+  debug: false
+  horizon: 100 # Default future window for binary classification
+
+model:
+  type: "cnn"  # options: cnn | transformer
+  window_size: 128
+  stride: 32
+  cnn:
+    filters: [64, 128, 256]
+    kernel_size: 3
+    dropout: 0.3
+  transformer:
+    d_model: 64
+    nhead: 4
+    num_layers: 2
+    dim_feedforward: 256
+    dropout: 0.1
+
+training:
+  batch_size: 32
+  epochs: 20
+  lr: 0.001
+  patience: 5 # Early stopping patience
+  device: "cuda" # cuda or cpu
+  seed: 42
+
+task:
+  type: "classification"  # options: classification | rul | explain
+
+paths:
+  checkpoints: "outputs/models"
+  logs: "outputs/logs"
+  results: "outputs/results"
