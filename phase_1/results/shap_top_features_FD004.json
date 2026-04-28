@@ -1,0 +1,82 @@
+[
+    {
+        "feature": "s13_min",
+        "importance": 2.829794
+    },
+    {
+        "feature": "op2",
+        "importance": 2.460665
+    },
+    {
+        "feature": "s8_min",
+        "importance": 1.942585
+    },
+    {
+        "feature": "s11_min",
+        "importance": 1.866775
+    },
+    {
+        "feature": "s2",
+        "importance": 1.55541
+    },
+    {
+        "feature": "s11",
+        "importance": 1.097943
+    },
+    {
+        "feature": "s4",
+        "importance": 1.052384
+    },
+    {
+        "feature": "s14_min",
+        "importance": 0.946795
+    },
+    {
+        "feature": "s8",
+        "importance": 0.807807
+    },
+    {
+        "feature": "s4_min",
+        "importance": 0.741894
+    },
+    {
+        "feature": "s11_max",
+        "importance": 0.711068
+    },
+    {
+        "feature": "s21_max",
+        "importance": 0.682073
+    },
+    {
+        "feature": "s20_max",
+        "importance": 0.675041
+    },
+    {
+        "feature": "s13",
+        "importance": 0.67271
+    },
+    {
+        "feature": "s17_min",
+        "importance": 0.672283
+    },
+    {
+        "feature": "s13_std",
+        "importance": 0.659935
+    },
+    {
+        "feature": "s4_max",
+        "importance": 0.622636
+    },
+    {
+        "feature": "s3",
+        "importance": 0.585174
+    },
+    {
+        "feature": "s17",
+        "importance": 0.572285
+    },
+    {
+        "feature": "s3_min",
+        "importance": 0.542835
+    }
+]

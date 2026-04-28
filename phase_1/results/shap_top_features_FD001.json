@@ -1,0 +1,82 @@
+[
+    {
+        "feature": "s14_min",
+        "importance": 0.126356
+    },
+    {
+        "feature": "s8_min",
+        "importance": 0.124373
+    },
+    {
+        "feature": "s9_mean",
+        "importance": 0.119938
+    },
+    {
+        "feature": "s9_min",
+        "importance": 0.115623
+    },
+    {
+        "feature": "s9_max",
+        "importance": 0.110073
+    },
+    {
+        "feature": "s12_mean",
+        "importance": 0.105758
+    },
+    {
+        "feature": "s11_mean",
+        "importance": 0.1008
+    },
+    {
+        "feature": "s20_min",
+        "importance": 0.098033
+    },
+    {
+        "feature": "s14_mean",
+        "importance": 0.097847
+    },
+    {
+        "feature": "s8",
+        "importance": 0.097386
+    },
+    {
+        "feature": "s13_min",
+        "importance": 0.097225
+    },
+    {
+        "feature": "s13_mean",
+        "importance": 0.095801
+    },
+    {
+        "feature": "s14_max",
+        "importance": 0.095168
+    },
+    {
+        "feature": "s12_max",
+        "importance": 0.094557
+    },
+    {
+        "feature": "s11_min",
+        "importance": 0.091871
+    },
+    {
+        "feature": "s8_mean",
+        "importance": 0.090058
+    },
+    {
+        "feature": "s14",
+        "importance": 0.087647
+    },
+    {
+        "feature": "s13",
+        "importance": 0.087616
+    },
+    {
+        "feature": "s9_std",
+        "importance": 0.086308
+    },
+    {
+        "feature": "s4_min",
+        "importance": 0.085038
+    }
+]

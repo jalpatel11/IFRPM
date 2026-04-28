@@ -1,0 +1,216 @@
+2026-04-27 19:37:35,928 - lstm_rul - INFO - =======================================================
+2026-04-27 19:37:35,929 - lstm_rul - INFO - IFRPM — Bi-LSTM RUL Prediction (Fixed)
+2026-04-27 19:37:35,930 - lstm_rul - INFO - Fix 1: Operating condition clustering
+2026-04-27 19:37:35,930 - lstm_rul - INFO - Fix 2: Per-regime MinMaxScaler
+2026-04-27 19:37:35,931 - lstm_rul - INFO - =======================================================
+2026-04-27 19:37:35,932 - lstm_rul - INFO - 
+#######################################################
+DATASET: FD001
+#######################################################
+2026-04-27 19:37:35,932 - lstm_rul - INFO - Loading FD001...
+2026-04-27 19:37:36,332 - lstm_rul - INFO - Train: (20631, 27)  Test: (13096, 27)
+2026-04-27 19:37:36,332 - lstm_rul - INFO - [1/4] Preprocessing with regime-aware scaling...
+2026-04-27 19:37:36,333 - lstm_rul - INFO - Clustering operating conditions...
+2026-04-27 19:37:38,522 - lstm_rul - INFO -   Regimes found in train: 6 (of 6 requested)
+2026-04-27 19:37:38,522 - lstm_rul - INFO - Computing rolling features for train...
+2026-04-27 19:37:39,278 - lstm_rul - INFO - Computing rolling features for test...
+2026-04-27 19:37:40,125 - lstm_rul - INFO - Fitting per-regime scalers...
+2026-04-27 19:38:38,278 - lstm_rul - INFO - =======================================================
+2026-04-27 19:38:38,278 - lstm_rul - INFO - IFRPM — Bi-LSTM RUL Prediction (Fixed)
+2026-04-27 19:38:38,278 - lstm_rul - INFO - Fix 1: Operating condition clustering
+2026-04-27 19:38:38,278 - lstm_rul - INFO - Fix 2: Per-regime MinMaxScaler
+2026-04-27 19:38:38,279 - lstm_rul - INFO - =======================================================
+2026-04-27 19:38:38,280 - lstm_rul - INFO - 
+#######################################################
+DATASET: FD001
+#######################################################
+2026-04-27 19:38:38,280 - lstm_rul - INFO - Loading FD001...
+2026-04-27 19:38:38,680 - lstm_rul - INFO - Train: (20631, 27)  Test: (13096, 27)
+2026-04-27 19:38:38,681 - lstm_rul - INFO - [1/4] Preprocessing with regime-aware scaling...
+2026-04-27 19:38:38,681 - lstm_rul - INFO - Clustering operating conditions...
+2026-04-27 19:38:40,376 - lstm_rul - INFO -   Regimes found in train: 6 (of 6 requested)
+2026-04-27 19:38:40,376 - lstm_rul - INFO - Computing rolling features for train...
+2026-04-27 19:38:41,147 - lstm_rul - INFO - Computing rolling features for test...
+2026-04-27 19:38:42,015 - lstm_rul - INFO - Fitting per-regime scalers...
+2026-04-27 19:38:42,082 - lstm_rul - INFO -   Regime 0: 3586 train rows, 2353 test rows
+2026-04-27 19:38:42,106 - lstm_rul - INFO -   Regime 1: 1812 train rows, 1161 test rows
+2026-04-27 19:38:42,134 - lstm_rul - INFO -   Regime 2: 4516 train rows, 2884 test rows
+2026-04-27 19:38:42,159 - lstm_rul - INFO -   Regime 3: 3988 train rows, 2541 test rows
+2026-04-27 19:38:42,181 - lstm_rul - INFO -   Regime 4: 1622 train rows, 1003 test rows
+2026-04-27 19:38:42,210 - lstm_rul - INFO -   Regime 5: 5107 train rows, 3154 test rows
+2026-04-27 19:38:42,214 - lstm_rul - INFO - Features: 78 (includes 6 regime one-hots)
+2026-04-27 19:38:42,214 - lstm_rul - INFO - [2/4] Splitting 80/20 by engine unit...
+2026-04-27 19:38:42,271 - lstm_rul - INFO - Train engines: 80 | Val engines: 20
+2026-04-27 19:38:42,271 - lstm_rul - INFO - [3/4] Training Bi-LSTM...
+2026-04-27 19:38:42,272 - lstm_rul - INFO - Training on: cuda
+2026-04-27 19:38:42,479 - lstm_rul - INFO - Dataset: 14241 windows, shape torch.Size([14241, 30, 78])
+2026-04-27 19:38:42,525 - lstm_rul - INFO - Dataset: 3490 windows, shape torch.Size([3490, 30, 78])
+2026-04-27 19:39:01,666 - lstm_rul - INFO - Epoch  10 | Train RMSE: 19.435 | Val RMSE: 16.952
+2026-04-27 19:39:05,335 - lstm_rul - INFO - Epoch  20 | Train RMSE: 15.563 | Val RMSE: 14.046
+2026-04-27 19:39:09,272 - lstm_rul - INFO - Epoch  30 | Train RMSE: 13.139 | Val RMSE: 11.765
+2026-04-27 19:39:12,921 - lstm_rul - INFO - Epoch  40 | Train RMSE: 11.830 | Val RMSE: 12.919
+2026-04-27 19:39:14,722 - lstm_rul - INFO - Early stopping at epoch 45
+2026-04-27 19:39:14,722 - lstm_rul - INFO - Best val RMSE: 11.765
+2026-04-27 19:39:14,874 - lstm_rul - INFO - [4/4] Evaluating on test set...
+2026-04-27 19:39:15,091 - lstm_rul - INFO - Dataset: 10196 windows, shape torch.Size([10196, 30, 78])
+2026-04-27 19:39:15,224 - lstm_rul - INFO - RMSE: 13.835 | MAE: 9.253 | NASA: 35689.8
+2026-04-27 19:39:15,923 - lstm_rul - INFO - 
+#######################################################
+DATASET: FD002
+#######################################################
+2026-04-27 19:39:15,923 - lstm_rul - INFO - Loading FD002...
+2026-04-27 19:39:17,196 - lstm_rul - INFO - Train: (53759, 27)  Test: (33991, 27)
+2026-04-27 19:39:17,197 - lstm_rul - INFO - [1/4] Preprocessing with regime-aware scaling...
+2026-04-27 19:39:17,198 - lstm_rul - INFO - Clustering operating conditions...
+2026-04-27 19:39:18,393 - lstm_rul - INFO -   Regimes found in train: 6 (of 6 requested)
+2026-04-27 19:39:18,393 - lstm_rul - INFO - Computing rolling features for train...
+2026-04-27 19:39:20,530 - lstm_rul - INFO - Computing rolling features for test...
+2026-04-27 19:39:22,603 - lstm_rul - INFO - Fitting per-regime scalers...
+2026-04-27 19:39:22,717 - lstm_rul - INFO -   Regime 0: 13458 train rows, 8483 test rows
+2026-04-27 19:39:22,758 - lstm_rul - INFO -   Regime 1: 8096 train rows, 5107 test rows
+2026-04-27 19:39:22,797 - lstm_rul - INFO -   Regime 2: 8002 train rows, 5042 test rows
+2026-04-27 19:39:22,835 - lstm_rul - INFO -   Regime 3: 8044 train rows, 5148 test rows
+2026-04-27 19:39:22,874 - lstm_rul - INFO -   Regime 4: 8037 train rows, 5148 test rows
+2026-04-27 19:39:22,912 - lstm_rul - INFO -   Regime 5: 8122 train rows, 5063 test rows
+2026-04-27 19:39:22,920 - lstm_rul - INFO - Features: 78 (includes 6 regime one-hots)
+2026-04-27 19:39:22,921 - lstm_rul - INFO - [2/4] Splitting 80/20 by engine unit...
+2026-04-27 19:39:22,960 - lstm_rul - INFO - Train engines: 208 | Val engines: 52
+2026-04-27 19:39:22,960 - lstm_rul - INFO - [3/4] Training Bi-LSTM...
+2026-04-27 19:39:22,961 - lstm_rul - INFO - Training on: cuda
+2026-04-27 19:39:23,436 - lstm_rul - INFO - Dataset: 36484 windows, shape torch.Size([36484, 30, 78])
+2026-04-27 19:39:23,609 - lstm_rul - INFO - Dataset: 9735 windows, shape torch.Size([9735, 30, 78])
+2026-04-27 19:39:33,416 - lstm_rul - INFO - Epoch  10 | Train RMSE: 19.467 | Val RMSE: 20.813
+2026-04-27 19:39:43,186 - lstm_rul - INFO - Epoch  20 | Train RMSE: 18.056 | Val RMSE: 17.282
+2026-04-27 19:39:52,132 - lstm_rul - INFO - Epoch  30 | Train RMSE: 11.586 | Val RMSE: 17.764
+2026-04-27 19:39:58,385 - lstm_rul - INFO - Early stopping at epoch 37
+2026-04-27 19:39:58,385 - lstm_rul - INFO - Best val RMSE: 16.322
+2026-04-27 19:39:58,529 - lstm_rul - INFO - [4/4] Evaluating on test set...
+2026-04-27 19:39:59,293 - lstm_rul - INFO - Dataset: 26505 windows, shape torch.Size([26505, 30, 78])
+2026-04-27 19:39:59,603 - lstm_rul - INFO - RMSE: 15.943 | MAE: 12.362 | NASA: 136648.4
+2026-04-27 19:40:00,327 - lstm_rul - INFO - 
+#######################################################
+DATASET: FD003
+#######################################################
+2026-04-27 19:40:00,327 - lstm_rul - INFO - Loading FD003...
+2026-04-27 19:40:01,050 - lstm_rul - INFO - Train: (24720, 27)  Test: (16596, 27)
+2026-04-27 19:40:01,051 - lstm_rul - INFO - [1/4] Preprocessing with regime-aware scaling...
+2026-04-27 19:40:01,051 - lstm_rul - INFO - Clustering operating conditions...
+2026-04-27 19:40:02,379 - lstm_rul - INFO -   Regimes found in train: 6 (of 6 requested)
+2026-04-27 19:40:02,379 - lstm_rul - INFO - Computing rolling features for train...
+2026-04-27 19:40:03,149 - lstm_rul - INFO - Computing rolling features for test...
+2026-04-27 19:40:03,893 - lstm_rul - INFO - Fitting per-regime scalers...
+2026-04-27 19:40:03,955 - lstm_rul - INFO -   Regime 0: 5863 train rows, 3960 test rows
+2026-04-27 19:40:03,983 - lstm_rul - INFO -   Regime 1: 4720 train rows, 3263 test rows
+2026-04-27 19:40:04,012 - lstm_rul - INFO -   Regime 2: 4582 train rows, 3092 test rows
+2026-04-27 19:40:04,035 - lstm_rul - INFO -   Regime 3: 1766 train rows, 1165 test rows
+2026-04-27 19:40:04,058 - lstm_rul - INFO -   Regime 4: 2170 train rows, 1476 test rows
+2026-04-27 19:40:04,087 - lstm_rul - INFO -   Regime 5: 5619 train rows, 3640 test rows
+2026-04-27 19:40:04,092 - lstm_rul - INFO - Features: 78 (includes 6 regime one-hots)
+2026-04-27 19:40:04,092 - lstm_rul - INFO - [2/4] Splitting 80/20 by engine unit...
+2026-04-27 19:40:04,111 - lstm_rul - INFO - Train engines: 80 | Val engines: 20
+2026-04-27 19:40:04,111 - lstm_rul - INFO - [3/4] Training Bi-LSTM...
+2026-04-27 19:40:04,112 - lstm_rul - INFO - Training on: cuda
+2026-04-27 19:40:04,336 - lstm_rul - INFO - Dataset: 16667 windows, shape torch.Size([16667, 30, 78])
+2026-04-27 19:40:04,412 - lstm_rul - INFO - Dataset: 5153 windows, shape torch.Size([5153, 30, 78])
+2026-04-27 19:40:08,727 - lstm_rul - INFO - Epoch  10 | Train RMSE: 18.478 | Val RMSE: 16.323
+2026-04-27 19:40:13,070 - lstm_rul - INFO - Epoch  20 | Train RMSE: 14.249 | Val RMSE: 12.205
+2026-04-27 19:40:17,449 - lstm_rul - INFO - Epoch  30 | Train RMSE: 13.534 | Val RMSE: 15.111
+2026-04-27 19:40:21,739 - lstm_rul - INFO - Epoch  40 | Train RMSE: 11.534 | Val RMSE: 13.159
+2026-04-27 19:40:22,979 - lstm_rul - INFO - Early stopping at epoch 43
+2026-04-27 19:40:22,979 - lstm_rul - INFO - Best val RMSE: 11.359
+2026-04-27 19:40:23,098 - lstm_rul - INFO - [4/4] Evaluating on test set...
+2026-04-27 19:40:23,361 - lstm_rul - INFO - Dataset: 13696 windows, shape torch.Size([13696, 30, 78])
+2026-04-27 19:40:23,558 - lstm_rul - INFO - RMSE: 12.770 | MAE: 8.834 | NASA: 49715.1
+2026-04-27 19:40:24,183 - lstm_rul - INFO - 
+#######################################################
+DATASET: FD004
+#######################################################
+2026-04-27 19:40:24,183 - lstm_rul - INFO - Loading FD004...
+2026-04-27 19:40:25,577 - lstm_rul - INFO - Train: (61249, 27)  Test: (41214, 27)
+2026-04-27 19:40:25,578 - lstm_rul - INFO - [1/4] Preprocessing with regime-aware scaling...
+2026-04-27 19:40:25,578 - lstm_rul - INFO - Clustering operating conditions...
+2026-04-27 19:40:26,829 - lstm_rul - INFO -   Regimes found in train: 6 (of 6 requested)
+2026-04-27 19:40:26,829 - lstm_rul - INFO - Computing rolling features for train...
+2026-04-27 19:40:28,890 - lstm_rul - INFO - Computing rolling features for test...
+2026-04-27 19:40:30,910 - lstm_rul - INFO - Fitting per-regime scalers...
+2026-04-27 19:40:31,041 - lstm_rul - INFO -   Regime 0: 15395 train rows, 10382 test rows
+2026-04-27 19:40:31,089 - lstm_rul - INFO -   Regime 1: 9224 train rows, 6185 test rows
+2026-04-27 19:40:31,128 - lstm_rul - INFO -   Regime 2: 9139 train rows, 6107 test rows
+2026-04-27 19:40:31,168 - lstm_rul - INFO -   Regime 3: 9238 train rows, 6054 test rows
+2026-04-27 19:40:31,211 - lstm_rul - INFO -   Regime 4: 9162 train rows, 6232 test rows
+2026-04-27 19:40:31,253 - lstm_rul - INFO -   Regime 5: 9091 train rows, 6254 test rows
+2026-04-27 19:40:31,260 - lstm_rul - INFO - Features: 78 (includes 6 regime one-hots)
+2026-04-27 19:40:31,260 - lstm_rul - INFO - [2/4] Splitting 80/20 by engine unit...
+2026-04-27 19:40:31,294 - lstm_rul - INFO - Train engines: 200 | Val engines: 49
+2026-04-27 19:40:31,294 - lstm_rul - INFO - [3/4] Training Bi-LSTM...
+2026-04-27 19:40:31,295 - lstm_rul - INFO - Training on: cuda
+2026-04-27 19:40:31,899 - lstm_rul - INFO - Dataset: 43282 windows, shape torch.Size([43282, 30, 78])
+2026-04-27 19:40:32,086 - lstm_rul - INFO - Dataset: 10746 windows, shape torch.Size([10746, 30, 78])
+2026-04-27 19:40:43,421 - lstm_rul - INFO - Epoch  10 | Train RMSE: 19.057 | Val RMSE: 18.378
+2026-04-27 19:40:54,433 - lstm_rul - INFO - Epoch  20 | Train RMSE: 16.222 | Val RMSE: 15.818
+2026-04-27 19:41:05,564 - lstm_rul - INFO - Epoch  30 | Train RMSE: 14.312 | Val RMSE: 14.928
+2026-04-27 19:41:16,844 - lstm_rul - INFO - Epoch  40 | Train RMSE: 11.954 | Val RMSE: 15.643
+2026-04-27 19:41:24,703 - lstm_rul - INFO - Early stopping at epoch 47
+2026-04-27 19:41:24,703 - lstm_rul - INFO - Best val RMSE: 14.473
+2026-04-27 19:41:24,841 - lstm_rul - INFO - [4/4] Evaluating on test set...
+2026-04-27 19:41:25,672 - lstm_rul - INFO - Dataset: 34081 windows, shape torch.Size([34081, 30, 78])
+2026-04-27 19:41:26,077 - lstm_rul - INFO - RMSE: 14.703 | MAE: 8.744 | NASA: 388871.9
+2026-04-27 19:41:26,631 - lstm_rul - INFO - Done. Results saved to: /home/dmohile/capstone/phase_1/results
+2026-04-27 20:25:12,241 - pipeline - INFO - Loading models into registry...
+2026-04-27 20:25:12,241 - pipeline - INFO - Fitting preprocessors for FD001...
+2026-04-27 20:25:15,007 - pipeline - INFO -   FD001 ready — 78 features, device=cuda
+2026-04-27 20:25:15,008 - pipeline - INFO - Fitting preprocessors for FD002...
+2026-04-27 20:25:18,978 - pipeline - INFO -   FD002 ready — 78 features, device=cuda
+2026-04-27 20:25:18,980 - pipeline - INFO - Fitting preprocessors for FD003...
+2026-04-27 20:25:21,743 - pipeline - INFO -   FD003 ready — 78 features, device=cuda
+2026-04-27 20:25:21,744 - pipeline - INFO - Fitting preprocessors for FD004...
+2026-04-27 20:25:25,663 - pipeline - INFO -   FD004 ready — 78 features, device=cuda
+2026-04-27 20:25:25,665 - pipeline - INFO - Registry loaded: ['FD001', 'FD002', 'FD003', 'FD004']
+2026-04-27 20:25:25,665 - pipeline - INFO - 
+Starting pipeline on http://0.0.0.0:5050
+2026-04-27 20:25:25,666 - pipeline - INFO - Endpoints:
+2026-04-27 20:25:25,667 - pipeline - INFO -   GET  /health
+2026-04-27 20:25:25,668 - pipeline - INFO -   POST /predict          — single engine (JSON body)
+2026-04-27 20:25:25,668 - pipeline - INFO -   POST /predict/batch    — CSV file upload
+2026-04-27 20:25:25,668 - pipeline - INFO -   GET  /predict/file?dataset=FD001&split=test  — file on Sol
+2026-04-27 23:34:03,829 - save_pipeline - INFO - Saving inference pipelines for all datasets...
+2026-04-27 23:34:03,829 - save_pipeline - INFO - 
+==================================================
+Saving pipeline for FD001
+==================================================
+2026-04-27 23:34:03,829 - save_pipeline - INFO -   Rebuilding preprocessing artifacts for FD001...
+2026-04-27 23:34:06,129 - save_pipeline - INFO -   Features: 78 | Regimes: 6
+2026-04-27 23:34:06,198 - save_pipeline - INFO -   Loaded: /home/dmohile/capstone/phase_1/models/best_lstm_FD001.pt
+2026-04-27 23:34:06,213 - save_pipeline - INFO -   Saved: /home/dmohile/capstone/phase_1/models/pipeline_FD001.pkl (1.58 MB)
+2026-04-27 23:34:06,214 - save_pipeline - INFO - 
+==================================================
+Saving pipeline for FD002
+==================================================
+2026-04-27 23:34:06,214 - save_pipeline - INFO -   Rebuilding preprocessing artifacts for FD002...
+2026-04-27 23:34:10,564 - save_pipeline - INFO -   Features: 78 | Regimes: 6
+2026-04-27 23:34:10,660 - save_pipeline - INFO -   Loaded: /home/dmohile/capstone/phase_1/models/best_lstm_FD002.pt
+2026-04-27 23:34:10,679 - save_pipeline - INFO -   Saved: /home/dmohile/capstone/phase_1/models/pipeline_FD002.pkl (1.71 MB)
+2026-04-27 23:34:10,679 - save_pipeline - INFO - 
+==================================================
+Saving pipeline for FD003
+==================================================
+2026-04-27 23:34:10,680 - save_pipeline - INFO -   Rebuilding preprocessing artifacts for FD003...
+2026-04-27 23:34:13,375 - save_pipeline - INFO -   Features: 78 | Regimes: 6
+2026-04-27 23:34:13,412 - save_pipeline - INFO -   Loaded: /home/dmohile/capstone/phase_1/models/best_lstm_FD003.pt
+2026-04-27 23:34:13,422 - save_pipeline - INFO -   Saved: /home/dmohile/capstone/phase_1/models/pipeline_FD003.pkl (1.60 MB)
+2026-04-27 23:34:13,423 - save_pipeline - INFO - 
+==================================================
+Saving pipeline for FD004
+==================================================
+2026-04-27 23:34:13,423 - save_pipeline - INFO -   Rebuilding preprocessing artifacts for FD004...
+2026-04-27 23:34:17,840 - save_pipeline - INFO -   Features: 78 | Regimes: 6
+2026-04-27 23:34:17,880 - save_pipeline - INFO -   Loaded: /home/dmohile/capstone/phase_1/models/best_lstm_FD004.pt
+2026-04-27 23:34:17,892 - save_pipeline - INFO -   Saved: /home/dmohile/capstone/phase_1/models/pipeline_FD004.pkl (1.73 MB)
+2026-04-27 23:34:17,892 - save_pipeline - INFO - 
+==================================================
+2026-04-27 23:34:17,892 - save_pipeline - INFO - Saved pipelines:
+2026-04-27 23:34:17,893 - save_pipeline - INFO -   /home/dmohile/capstone/phase_1/models/pipeline_FD001.pkl
+2026-04-27 23:34:17,893 - save_pipeline - INFO -   /home/dmohile/capstone/phase_1/models/pipeline_FD002.pkl
+2026-04-27 23:34:17,894 - save_pipeline - INFO -   /home/dmohile/capstone/phase_1/models/pipeline_FD003.pkl
+2026-04-27 23:34:17,894 - save_pipeline - INFO -   /home/dmohile/capstone/phase_1/models/pipeline_FD004.pkl
+2026-04-27 23:34:17,895 - save_pipeline - INFO - ==================================================
