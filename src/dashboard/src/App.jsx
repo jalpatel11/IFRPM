@@ -397,8 +397,254 @@ function EnginePredictor() {
   );
 }
 
+// ─── FULL PREDICTION PAGE ────────────────────────────────────────────────────
+function FullPrediction() {
+  // Battery state
+  const [batVals, setBatVals] = useState({
+    cycle_normalized:0.5, SOH:90, capacity_ahr:1.7, Re_norm:1.0, Rct_norm:1.0,
+    SOH_rolling_mean:90, SOH_rolling_std:0.5, temperature_stress_factor:1.0,
+    capacity_fade_rate:-0.003, ambient_temperature:25,
+  });
+  const [batResult, setBatResult] = useState(null);
+
+  // Capacitor state
+  const [capVals, setCapVals] = useState({ esr:0.18, cs:1450, zmag:0.27, phase:-20, sweeps:10 });
+  const [capResult, setCapResult] = useState(null);
+
+  // Engine state
+  const [engVals, setEngVals] = useState({
+    s2:643, s3:1586, s4:1400, s7:554, s8:2388.1, s9:9063,
+    s11:47.1, s12:521, s13:2388.1, s14:8134, s15:8.413, s17:393, s20:39.0, s21:23.40,
+  });
+  const [engResult, setEngResult] = useState(null);
+
+  // ── predict functions (same logic as individual predictors) ─────────────────
+  function predictBat(v) {
+    const soh=+v.SOH, rctN=+v.Rct_norm, reN=+v.Re_norm, cycN=+v.cycle_normalized;
+    const fade=+v.capacity_fade_rate, temp=+v.temperature_stress_factor;
+    const sohRUL=Math.max(0,((soh-70)/30)*50);
+    const impPen=Math.max(0,1-((rctN-1)*0.6+(reN-1)*0.3));
+    const fadePen=Math.max(0,1+fade*200);
+    const cycRUL=Math.max(0,(1-cycN)*50);
+    const tempPen=Math.max(0.5,2-temp);
+    const rul=Math.min(50,Math.max(0,Math.round(sohRUL*0.45+cycRUL*0.25+sohRUL*impPen*fadePen*tempPen*0.3)));
+    return { rul, band:rul<15?"Critical":rul<35?"Warning":"Normal" };
+  }
+
+  function predictCap(v) {
+    const esr=+v.esr, cs=+v.cs, sw=+v.sweeps;
+    const esrF=Math.max(0,1-(esr-0.18)/(0.45-0.18));
+    const csF=Math.max(0,(cs-900)/(1460-900));
+    const swF=Math.max(0,1-sw/50);
+    const rul=Math.min(90,Math.max(0,Math.round((esrF*0.5+csF*0.35+swF*0.15)*90)));
+    return { rul, band:rul<20?"Critical":rul<50?"Warning":"Normal" };
+  }
+
+  function predictEng(v) {
+    const s3=+v.s3, s4=+v.s4, s9=+v.s9, s11=+v.s11, s12=+v.s12;
+    const s3s=Math.max(0,1-(s3-1585)/(1615-1585));
+    const s4s=Math.max(0,1-(s4-1398)/(1445-1398));
+    const s9s=Math.max(0,(s9-9050)/(9075-9050));
+    const s11s=Math.max(0,1-Math.abs(s11-47.1)/1.2);
+    const s12s=Math.max(0,(s12-515)/(525-515));
+    const rul=Math.min(125,Math.max(0,Math.round((s3s*0.30+s4s*0.25+s9s*0.20+s11s*0.15+s12s*0.10)*125)));
+    const mode=s3>1600&&s4>1430?"HPC+HPT degradation":s3>1595?"HPC wear":s9<9055?"Core speed anomaly":"Normal";
+    return { rul, band:rul<30?"Critical":rul<70?"Warning":"Normal", mode };
+  }
+
+  function runAll() {
+    setBatResult(predictBat(batVals));
+    setCapResult(predictCap(capVals));
+    setEngResult(predictEng(engVals));
+  }
+
+  function loadDemoAll(type) {
+    if (type === "critical") {
+      setBatVals(BATTERY_DEMO_CRITICAL);
+      setCapVals(CAP_DEMO_CRITICAL);
+      setEngVals(ENG_DEMO_CRITICAL);
+    } else {
+      setBatVals(BATTERY_DEMO_NORMAL);
+      setCapVals(CAP_DEMO_NORMAL);
+      setEngVals(ENG_DEMO_NORMAL);
+    }
+    setBatResult(null); setCapResult(null); setEngResult(null);
+  }
+
+  // Overall decision: worst band across all 3 results
+  const allResults = [batResult, capResult, engResult].filter(Boolean);
+  const overallBand = allResults.some(r=>r.band==="Critical") ? "Critical"
+                    : allResults.some(r=>r.band==="Warning")  ? "Warning"
+                    : allResults.length===3                    ? "Normal"
+                    : null;
+
+  const MONO = { fontFamily:"'JetBrains Mono',monospace" };
+
+  // ── field renderer ─────────────────────────────────────────────────────────
+  function FieldGrid({ fields, vals, setVals, accent }) {
+    return (
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:10 }}>
+        {fields.map(f=>(
+          <div key={f.key}>
+            <label style={{fontSize:8,color:"rgba(255,255,255,0.36)",textTransform:"uppercase",letterSpacing:"0.07em",display:"block",marginBottom:3,fontWeight:700,lineHeight:1.3}}>{f.label}</label>
+            <input type="number" min={f.min} max={f.max} step={f.step} value={vals[f.key]}
+              onChange={e=>setVals({...vals,[f.key]:e.target.value})}
+              style={{width:"100%",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.09)",borderRadius:6,padding:"6px 8px",color:"#e2e8f0",fontSize:12,...MONO,outline:"none"}}/>
+            <input type="range" min={f.min} max={f.max} step={f.step} value={vals[f.key]}
+              onChange={e=>setVals({...vals,[f.key]:e.target.value})}
+              style={{width:"100%",marginTop:3,accentColor:accent,height:2}}/>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // ── result pill ────────────────────────────────────────────────────────────
+  function ResultPill({ result, unit }) {
+    if (!result) return <span style={{fontSize:11,color:"rgba(255,255,255,0.25)",fontStyle:"italic"}}>Not run yet</span>;
+    return (
+      <div style={{display:"flex",alignItems:"center",gap:12}}>
+        <span style={{...MONO,fontSize:26,fontWeight:800,color:RC(result.band),lineHeight:1}}>
+          {result.rul}<span style={{fontSize:10,fontWeight:400,color:"rgba(255,255,255,0.3)"}}> {unit}</span>
+        </span>
+        <Badge band={result.band}/>
+        {result.mode && <span style={{fontSize:10,color:"rgba(255,255,255,0.4)"}}>{result.mode}</span>}
+      </div>
+    );
+  }
+
+  const batFields = [
+    {key:"SOH",label:"SOH (%)",min:60,max:110,step:0.1},
+    {key:"capacity_ahr",label:"Capacity (Ahr)",min:1.2,max:2.1,step:0.01},
+    {key:"cycle_normalized",label:"Cycle (0–1)",min:0,max:1,step:0.01},
+    {key:"Re_norm",label:"Re norm",min:0.8,max:2.5,step:0.01},
+    {key:"Rct_norm",label:"Rct norm",min:0.8,max:3.0,step:0.01},
+    {key:"SOH_rolling_mean",label:"SOH Roll Mean",min:60,max:110,step:0.1},
+    {key:"SOH_rolling_std",label:"SOH Roll Std",min:0,max:5,step:0.01},
+    {key:"temperature_stress_factor",label:"Temp Stress",min:0.8,max:1.3,step:0.01},
+    {key:"capacity_fade_rate",label:"Fade Rate",min:-0.05,max:0.01,step:0.001},
+    {key:"ambient_temperature",label:"Ambient (°C)",min:4,max:50,step:0.5},
+  ];
+  const capFields = [
+    {key:"esr",label:"ESR (Ω)",min:0.10,max:0.60,step:0.001},
+    {key:"cs",label:"Cs (µF)",min:800,max:1600,step:1},
+    {key:"zmag",label:"Zmag (Ω)",min:0.15,max:0.80,step:0.001},
+    {key:"phase",label:"Phase (°)",min:-40,max:-5,step:0.1},
+    {key:"sweeps",label:"Sweep #",min:1,max:50,step:1},
+  ];
+  const engFields = [
+    {key:"s2",label:"s2 Fan Inlet",min:550,max:650,step:0.1},
+    {key:"s3",label:"s3 HPC Temp",min:1350,max:1620,step:0.1},
+    {key:"s4",label:"s4 HPT Temp",min:1180,max:1450,step:0.1},
+    {key:"s7",label:"s7 HPC Press",min:475,max:570,step:0.1},
+    {key:"s8",label:"s8 Fan Speed",min:2386,max:2391,step:0.01},
+    {key:"s9",label:"s9 Core Speed",min:9050,max:9080,step:0.1},
+    {key:"s11",label:"s11 Coolant",min:46,max:48,step:0.01},
+    {key:"s12",label:"s12 LPT Eff",min:515,max:525,step:0.1},
+    {key:"s13",label:"s13 LPT Flow",min:2385,max:2392,step:0.01},
+    {key:"s14",label:"s14 BPR",min:8100,max:8160,step:0.1},
+    {key:"s15",label:"s15 Bleed",min:8.38,max:8.46,step:0.001},
+    {key:"s17",label:"s17 HPT Cool",min:385,max:400,step:0.1},
+    {key:"s20",label:"s20 Bypass",min:38,max:40,step:0.01},
+    {key:"s21",label:"s21 Vibration",min:23.3,max:23.5,step:0.001},
+  ];
+
+  const sectionCard = (color, icon, title, by, note, children, result, unit) => (
+    <div style={{background:"rgba(255,255,255,0.022)",border:`1px solid ${color}20`,borderRadius:14,overflow:"hidden"}}>
+      {/* header */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 20px",borderBottom:`1px solid ${color}15`,background:`${color}06`}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <span style={{fontSize:16}}>{icon}</span>
+          <div>
+            <div style={{fontSize:13,fontWeight:700,color:"#fff"}}>{title}</div>
+            <div style={{fontSize:9,color:color,fontWeight:600,letterSpacing:"0.06em"}}>{by} · {note}</div>
+          </div>
+        </div>
+        <ResultPill result={result} unit={unit}/>
+      </div>
+      {/* fields */}
+      <div style={{padding:"16px 20px"}}>{children}</div>
+    </div>
+  );
+
+  return (
+    <div style={{animation:"fadeIn 0.4s ease"}}>
+      {/* Page header */}
+      <div style={{marginBottom:18}}>
+        <h2 style={{fontSize:22,fontWeight:800,letterSpacing:"-0.03em",background:"linear-gradient(135deg,#3bf0ff,#a78bfa,#ffd439)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
+          Full Aircraft Readiness Prediction
+        </h2>
+        <p style={{fontSize:11,color:"rgba(255,255,255,0.28)",marginTop:3}}>
+          Enter readings for all three components → run combined prediction → get overall Go/No-Go
+        </p>
+      </div>
+
+      {/* Demo + Run buttons */}
+      <div style={{display:"flex",gap:10,marginBottom:20,alignItems:"center"}}>
+        <button onClick={()=>loadDemoAll("critical")} style={{padding:"8px 18px",borderRadius:8,border:"1px solid rgba(255,59,59,0.35)",background:"rgba(255,59,59,0.08)",color:"#ff3b3b",fontSize:11,fontWeight:700,cursor:"pointer"}}>
+          ⚡ Load All — Critical Demo
+        </button>
+        <button onClick={()=>loadDemoAll("normal")} style={{padding:"8px 18px",borderRadius:8,border:"1px solid rgba(124,255,107,0.35)",background:"rgba(124,255,107,0.08)",color:"#7cff6b",fontSize:11,fontWeight:700,cursor:"pointer"}}>
+          ✓ Load All — Normal Demo
+        </button>
+        <div style={{flex:1}}/>
+        <button onClick={runAll} style={{padding:"10px 32px",borderRadius:9,border:"1px solid rgba(59,240,255,0.4)",background:"linear-gradient(135deg,rgba(59,240,255,0.12),rgba(167,139,250,0.12))",color:"#3bf0ff",fontSize:13,fontWeight:800,letterSpacing:"0.04em",cursor:"pointer",boxShadow:"0 0 24px rgba(59,240,255,0.1)"}}>
+          ▶▶ Run Full Prediction
+        </button>
+      </div>
+
+      {/* Overall verdict — shown only after all 3 are run */}
+      {overallBand && (
+        <div style={{
+          marginBottom:20, padding:"18px 24px", borderRadius:13,
+          background:`${RC(overallBand)}0c`, border:`1.5px solid ${RC(overallBand)}35`,
+          display:"flex", alignItems:"center", gap:20, animation:"fadeIn 0.5s ease"
+        }}>
+          <div style={{width:16,height:16,borderRadius:"50%",background:RC(overallBand),boxShadow:`0 0 16px ${RC(overallBand)}`,flexShrink:0}}/>
+          <div>
+            <div style={{fontSize:10,color:"rgba(255,255,255,0.3)",textTransform:"uppercase",letterSpacing:"0.12em",marginBottom:4}}>Overall Aircraft Readiness — Combined Decision</div>
+            <div style={{fontSize:20,fontWeight:800,color:RC(overallBand)}}>
+              {overallBand==="Critical" ? "NO-GO — Aircraft Not Flight Ready. Immediate Maintenance Required."
+               : overallBand==="Warning" ? "CAUTION — Schedule Maintenance Before Next Flight."
+               : "GO — Aircraft Cleared for Flight. All Components Nominal."}
+            </div>
+          </div>
+          <div style={{marginLeft:"auto",display:"flex",gap:24}}>
+            {[
+              {l:"Battery RUL",   v:batResult?`${batResult.rul} cyc`:"—",  c:batResult?RC(batResult.band):"rgba(255,255,255,0.25)"},
+              {l:"Capacitor RUL", v:capResult?`${capResult.rul} sw`:"—",   c:capResult?RC(capResult.band):"rgba(255,255,255,0.25)"},
+              {l:"Engine RUL",    v:engResult?`${engResult.rul} cyc`:"—",  c:engResult?RC(engResult.band):"rgba(255,255,255,0.25)"},
+            ].map(m=>(
+              <div key={m.l} style={{textAlign:"center"}}>
+                <div style={{fontSize:8,color:"rgba(255,255,255,0.28)",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:3}}>{m.l}</div>
+                <div style={{...MONO,fontSize:18,fontWeight:800,color:m.c}}>{m.v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Three component sections */}
+      <div style={{display:"flex",flexDirection:"column",gap:14}}>
+        {sectionCard("#ffd439","⚡","Battery RUL","Prem · XGBoost","NASA Battery · EOL 1.4 Ahr · RMSE 5.8 · R² 0.92",
+          <FieldGrid fields={batFields} vals={batVals} setVals={setBatVals} accent="#ffd439"/>,
+          batResult,"cyc"
+        )}
+        {sectionCard("#a78bfa","⚙","Capacitor EIS","Hrishikesh","NASA Capacitor · EIS Spectroscopy · ESR/Cs degradation",
+          <FieldGrid fields={capFields} vals={capVals} setVals={setCapVals} accent="#a78bfa"/>,
+          capResult,"sweeps"
+        )}
+        {sectionCard("#38bdf8","✈","Engine C-MAPSS","Deveshree · Bi-LSTM","FD001–FD004 · 6 regimes · RUL clip 125 · SHAP",
+          <FieldGrid fields={engFields} vals={engVals} setVals={setEngVals} accent="#38bdf8"/>,
+          engResult,"cyc"
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
-const PAGES = ["Fleet Overview","Battery Monitor","Capacitor Health","Engine C-MAPSS","Predictor Tool"];
+const PAGES = ["Fleet Overview","Battery Monitor","Capacitor Health","Engine C-MAPSS","Predictor Tool","Full Prediction"];
 
 export default function App() {
   const [page,setPage]         = useState(0);
@@ -814,6 +1060,9 @@ export default function App() {
             {predTab===2&&<EnginePredictor/>}
           </div>
         )}
+
+        {/* ── PAGE 5: Full Prediction ─────────────────────────────────────── */}
+        {page===5&&<FullPrediction/>}
 
       </div>
     </div>
